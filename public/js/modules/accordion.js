@@ -1,25 +1,28 @@
 
+
 export function initAccordions() {
   document.querySelectorAll(".my-accordion").forEach(container => {
     const items = Array.from(container.querySelectorAll("details"));
 
-    container.addEventListener(
-      "click",
-      e => {
-        const summary = e.target.closest("summary");
-        if (!summary) return;
+    // Guard to avoid cascading toggle loops
+    let isSyncing = false;
 
-        const current = summary.parentElement;
-        if (!current || current.tagName !== "DETAILS") return;
+    items.forEach(item => {
+      item.addEventListener("toggle", () => {
+        if (isSyncing) return;
+        if (!item.open) return; // only act when something opens
 
-        // Close all others BEFORE browser toggles
-        items.forEach(item => {
-          if (item !== current) {
-            item.removeAttribute("open");
-          }
-        });
-      },
-      true // ← CAPTURE PHASE (this is key)
-    );
+        isSyncing = true;
+        try {
+          items.forEach(other => {
+            if (other !== item && other.open) {
+              other.open = false; // more reliable than removeAttribute
+            }
+          });
+        } finally {
+          isSyncing = false;
+        }
+      });
+    });
   });
 }
