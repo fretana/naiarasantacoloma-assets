@@ -2,7 +2,7 @@
 
 
 /* =========================================================
-   ACCORDION (details / summary)
+   ACCORDION (details / summary) — Carrd-safe
 ========================================================= */
 
 .my-accordion details {
@@ -10,8 +10,8 @@
   padding: 12px 0;
 }
 
-/* Remove default marker */
-.my-accordion summary {
+/* SUMMARY RESET — higher specificity */
+.my-accordion details > summary {
   list-style: none;
   cursor: pointer;
 
@@ -21,14 +21,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  /* reset Carrd defaults */
+  padding: 0;
+  margin: 0;
 }
 
-.my-accordion summary::-webkit-details-marker {
+/* Remove default marker everywhere */
+.my-accordion details > summary::-webkit-details-marker {
   display: none;
 }
 
-/* Custom indicator */
-.my-accordion summary::after {
+/* Indicator */
+.my-accordion details > summary::after {
   content: "+";
   font-size: 1.2rem;
   line-height: 1;
@@ -36,18 +41,14 @@
 }
 
 /* Open state */
-.my-accordion details[open] summary::after {
+.my-accordion details[open] > summary::after {
   content: "–";
 }
 
-/* Content panel */
+/* Panel */
 .my-accordion details > div {
   padding: 12px 0 8px 0;
   opacity: 0.9;
-}
-
-/* Optional: smooth open feel */
-.my-accordion details > div {
   animation: accordionFade 0.2s ease;
 }
 
@@ -61,3 +62,4 @@
     transform: translateY(0);
   }
 }
+

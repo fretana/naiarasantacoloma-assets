@@ -1,14 +1,16 @@
 
 
 export function initAccordions() {
-  const accordions = document.querySelectorAll(".my-accordion");
-
-  accordions.forEach(container => {
-    const items = container.querySelectorAll("details");
+  document.querySelectorAll(".my-accordion").forEach(container => {
+    const items = Array.from(container.querySelectorAll("details"));
 
     items.forEach(item => {
-      item.addEventListener("toggle", () => {
-        if (item.open) {
+      const summary = item.querySelector("summary");
+      if (!summary) return;
+
+      summary.addEventListener("click", () => {
+        // If this item is about to open, close others first
+        if (!item.hasAttribute("open")) {
           items.forEach(other => {
             if (other !== item) {
               other.removeAttribute("open");
