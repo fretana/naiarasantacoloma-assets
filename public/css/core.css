@@ -1,50 +1,60 @@
-
-
 /* =========================================================
-   ACCORDION — HARD RESET (Carrd-proof)
+   ACCORDION (details / summary)
 ========================================================= */
 
 .my-accordion details {
-  all: unset;
-  display: block;
   border-bottom: 1px solid rgba(0,0,0,0.15);
   padding: 12px 0;
 }
 
-.my-accordion details > summary {
-  all: unset;
+/* Remove default marker */
+.my-accordion summary {
+  list-style: none;
+  cursor: pointer;
+
+  font-size: 1rem;
+  font-weight: 500;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 0;
-  margin: 0;
 }
 
-/* Remove native marker */
-.my-accordion details > summary::-webkit-details-marker {
+.my-accordion summary::-webkit-details-marker {
   display: none;
 }
 
-/* Indicator */
-.my-accordion details > summary::after {
+/* Custom indicator */
+.my-accordion summary::after {
   content: "+";
   font-size: 1.2rem;
   line-height: 1;
+  transition: transform 0.2s ease;
 }
 
-.my-accordion details[open] > summary::after {
+/* Open state */
+.my-accordion details[open] summary::after {
   content: "–";
 }
 
-/* Panel */
+/* Content panel */
 .my-accordion details > div {
-  all: unset;
-  display: block;
   padding: 12px 0 8px 0;
   opacity: 0.9;
 }
 
+/* Optional: smooth open feel */
+.my-accordion details > div {
+  animation: accordionFade 0.2s ease;
+}
+
+@keyframes accordionFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
