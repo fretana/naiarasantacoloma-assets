@@ -66,7 +66,7 @@
 ========================================================= */
 
 .my-accordion details > div {
-  transition: opacity 0.18s ease, transform 0.18s ease;
+	transition: opacity 0.25s ease, transform 0.25s ease;
   opacity: 0;
   transform: translateY(-4px);
 }
