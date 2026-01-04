@@ -11,13 +11,16 @@ export function initAccordions() {
         if (!item.open) return;
 
         syncing = true;
-        try {
+
+        // ⏱ Defer closing others to next frame
+        requestAnimationFrame(() => {
           items.forEach(other => {
-            if (other !== item) other.open = false;
+            if (other !== item && other.open) {
+              other.open = false;
+            }
           });
-        } finally {
           syncing = false;
-        }
+        });
       });
     });
   });
