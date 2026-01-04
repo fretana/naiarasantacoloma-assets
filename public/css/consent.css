@@ -1,0 +1,96 @@
+/* Fuente Inter (coincide con Carrd) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+/* background:#111 */
+#qx_cookie_bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+  background: #EDE7DD;
+  padding: 14px 0;
+  font-family: 'Inter', sans-serif;
+}
+
+#qx_cookie_inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* color:#eee; */
+#qx_cookie_text {
+  flex: 1;
+  color: #19191A;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#qx_cookie_text a {
+  color: #19191A;
+  text-decoration: underline;
+}
+
+.qx_btn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 26px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+#qx_accept {
+  background: #00c896;
+  color: #000;
+}
+
+#qx_reject {
+  background: #444;
+  color: #fff;
+}
+
+/* Hover */
+.qx_btn:hover {
+  background: #EE765E !important;
+  color: #000 !important;
+}
+
+/* ⭐️ Responsive */
+@media (max-width: 768px) {
+  #qx_cookie_inner {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 16px;
+  }
+
+  #qx_cookie_text {
+    font-size: 13px;
+  }
+
+  .qx_btn {
+    width: 100%;
+    font-size: 15px;
+    padding: 12px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  #qx_cookie_text {
+    font-size: 12.5px;
+  }
+
+  .qx_btn {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px 20px;
+  }
+}
