@@ -5,109 +5,73 @@ export function initVideoGate() {
 
   if (afterMsg) afterMsg.style.display = "none";
 
-  if (!form) return;
-
-  const email = form.querySelector('input[type="email"]');
-  const consent = form.querySelector('input[type="checkbox"]');
-  const submit =
-    form.querySelector('button[type="submit"]') ||
-    form.querySelector('input[type="submit"]');
-
-  if (!email || !consent || !submit) return;
-
   /* ---------------------------------
-     STATE RESOLUTION
+     UNLOCK FROM EMAIL OR STORAGE
   --------------------------------- */
 
   const params = new URLSearchParams(window.location.search);
-  const unlockedFromEmail = params.get("from") === "email";
-  const alreadyUnlocked = localStorage.getItem("video_unlocked") === "true";
+  const shouldUnlock =
+    params.get("from") === "email" ||
+    localStorage.getItem("video_unlocked") === "true";
 
-  if (unlockedFromEmail || alreadyUnlocked) {
-    unlockAndHide();
-    if (unlockedFromEmail) {
-      localStorage.setItem("video_unlocked", "true");
-      history.replaceState(null, "", window.location.pathname);
-    }
+  if (shouldUnlock) {
+    tryUnlock();
     return;
   }
 
   /* ---------------------------------
-     VALIDATION HELPERS
+     FORM VALIDATION (NO submit hook)
   --------------------------------- */
 
-  const errorEmail = createError(email, "Introduce un email válido");
-  const errorConsent = createError(consent, "Debes aceptar el consentimiento");
+  if (!form) return;
+
+  const email = document.getElementById("main-form-email-input");
+  const consent = document.getElementById("main-form-consent-check");
+  const btn = form.querySelector("button[type='submit']");
+
+  if (!email || !consent || !btn) return;
 
   function isEmailValid(v) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   }
 
   function updateUI() {
-    const emailOk = isEmailValid(email.value);
-    const consentOk = consent.checked;
-
-    errorEmail.style.opacity = emailOk ? "0" : "1";
-    errorConsent.style.opacity = consentOk ? "0" : "1";
-
-    const ok = emailOk && consentOk;
-    submit.disabled = !ok;
-    submit.style.opacity = ok ? "1" : "0.4";
-    submit.style.cursor = ok ? "pointer" : "not-allowed";
+    const ok = isEmailValid(email.value) && consent.checked;
+    btn.disabled = !ok;
+    btn.style.opacity = ok ? "1" : "0.4";
+    btn.style.cursor = ok ? "pointer" : "not-allowed";
   }
-
-  /* ---------------------------------
-     EVENTS
-  --------------------------------- */
 
   email.addEventListener("input", updateUI);
   consent.addEventListener("change", updateUI);
 
-  form.addEventListener("submit", e => {
-    if (!isEmailValid(email.value) || !consent.checked) {
-      e.preventDefault();
-      updateUI();
-    }
-  });
-
-  // Esperar a que Carrd confirme éxito
-  const observer = new MutationObserver(() => {
-    if (form.classList.contains("success")) {
-      localStorage.setItem("video_unlocked", "true");
-      unlockAndHide();
-      observer.disconnect();
-    }
-  });
-
-  observer.observe(form, {
-    attributes: true,
-    attributeFilter: ["class"],
-  });
-
-
-  // Initial state
   updateUI();
 
   /* ---------------------------------
-     HELPERS
+     UNLOCK AFTER SUBMIT (CARRD SAFE)
   --------------------------------- */
 
-  function unlockAndHide() {
-    if (typeof window.unlockVideo === "function") {
-      window.unlockVideo();
+  function tryUnlock() {
+    if (!form || typeof window.unlockVideo !== "function") {
+      setTimeout(tryUnlock, 100);
+      return;
     }
 
-    form.style.display = "none";
+    window.unlockVideo();
+
+    if (form) form.style.display = "none";
     if (consentText) consentText.style.display = "none";
+
+    localStorage.setItem("video_unlocked", "true");
+
+    // Limpia la URL si venía de email
+    if (params.get("from")) {
+      history.replaceState(null, "", window.location.pathname);
+    }
   }
 
-  function createError(field, text) {
-    const wrapper = field.closest(".field")?.querySelector(".field-inner") || field.parentNode;
-    const el = document.createElement("div");
-    el.className = "error-msg";
-    el.textContent = text;
-    el.style.opacity = "0";
-    wrapper.appendChild(el);
-    return el;
-  }
+  // Observa el submit real de Carrd (sin tocarlo)
+  form.addEventListener("submit", () => {
+    setTimeout(tryUnlock, 500);
+  });
 }
