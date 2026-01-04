@@ -3,24 +3,20 @@
 export function initAccordions() {
   document.querySelectorAll(".my-accordion").forEach(container => {
     const items = Array.from(container.querySelectorAll("details"));
-
-    // Guard to avoid cascading toggle loops
-    let isSyncing = false;
+    let syncing = false;
 
     items.forEach(item => {
       item.addEventListener("toggle", () => {
-        if (isSyncing) return;
-        if (!item.open) return; // only act when something opens
+        if (syncing) return;
+        if (!item.open) return;
 
-        isSyncing = true;
+        syncing = true;
         try {
           items.forEach(other => {
-            if (other !== item && other.open) {
-              other.open = false; // more reliable than removeAttribute
-            }
+            if (other !== item) other.open = false;
           });
         } finally {
-          isSyncing = false;
+          syncing = false;
         }
       });
     });
