@@ -61,3 +61,17 @@
 }
 
 
+/* =========================================================
+   ACCORDION – smooth transitions (no flicker)
+========================================================= */
+
+.my-accordion details > div {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.my-accordion details[open] > div {
+  opacity: 1;
+  transform: translateY(0);
+}
