@@ -67,16 +67,23 @@ export function initVideoGate() {
     if (!isEmailValid(email.value) || !consent.checked) {
       e.preventDefault();
       updateUI();
-      return;
     }
-
-    // Successful submit → unlock
-    localStorage.setItem("video_unlocked", "true");
-    //unlockAndHide();
-    setTimeout(() => {
-      unlockAndHide();
-    }, 0);    
   });
+
+  // Esperar a que Carrd confirme éxito
+  const observer = new MutationObserver(() => {
+    if (form.classList.contains("success")) {
+      localStorage.setItem("video_unlocked", "true");
+      unlockAndHide();
+      observer.disconnect();
+    }
+  });
+
+  observer.observe(form, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+
 
   // Initial state
   updateUI();
