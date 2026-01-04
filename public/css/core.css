@@ -41,7 +41,7 @@
 .my-accordion details > div {
   padding: 12px 0 8px 0;
   opacity: 0.9;
-  text-align: left;
+  text-align: left !important;
 }
 
 /* Optional: smooth open feel */
