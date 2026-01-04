@@ -1,53 +1,74 @@
 /* ============================
-   LEGAL FOOTER
+   LEGAL FOOTER — FINAL SPEC
 ============================ */
 
 #qx_legal_footer {
-  background: #EDE7DD;
-  color: #19191A;
-  font-family: 'Inter', sans-serif;
-  padding: 28px 0;
+  background: #D4B72A;
+  padding: 0.75rem 1.875rem;
+  font-family: 'Libre Franklin', sans-serif;
 }
 
 .qx_footer_inner {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  text-align: center;
+  align-items: flex-start; /* alineado izquierda */
+  gap: 0.5rem;
+  text-align: left;
 }
 
+/* Texto copyright */
 .qx_footer_copy {
-  font-size: 13.5px;
-  opacity: 0.85;
+  font-size: 0.625rem;
+  font-weight: 500; /* medium */
+  color: #000000;
+  line-height: 1.4;
 }
 
+/* Links */
 .qx_footer_links {
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 300; /* light */
+  letter-spacing: 0.05em;
+  color: #000000;
 }
 
+/* Enlaces */
 .qx_footer_links a {
-  color: #19191A;
+  color: #000000;
+  text-decoration: none;
+}
+
+.qx_footer_links a:hover {
   text-decoration: underline;
 }
 
+/* Dividers (dot) */
 .qx_footer_links span {
-  margin: 0 6px;
-  opacity: 0.6;
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  background: #000000;
+  border-radius: 50%;
+  opacity: 0.7;
 }
 
 /* ============================
-   RESPONSIVE
+   MOBILE
 ============================ */
 
 @media (max-width: 600px) {
-  .qx_footer_links {
-    font-size: 13px;
+  #qx_legal_footer {
+    padding: 0.75rem 1.25rem;
   }
 
-  .qx_footer_copy {
-    font-size: 12.5px;
+  .qx_footer_links {
+    flex-wrap: wrap;
+    gap: 0.4rem;
   }
 }
