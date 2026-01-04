@@ -8,48 +8,10 @@ export function initVideoGate() {
   /* ---------------------------------
      UNLOCK FROM EMAIL OR STORAGE
   --------------------------------- */
-
   const params = new URLSearchParams(window.location.search);
   const shouldUnlock =
     params.get("from") === "email" ||
     localStorage.getItem("video_unlocked") === "true";
-
-  if (shouldUnlock) {
-    tryUnlock();
-    return;
-  }
-
-  /* ---------------------------------
-     FORM VALIDATION (NO submit hook)
-  --------------------------------- */
-
-  if (!form) return;
-
-  const email = document.getElementById("main-form-email-input");
-  const consent = document.getElementById("main-form-consent-check");
-  const btn = form.querySelector("button[type='submit']");
-
-  if (!email || !consent || !btn) return;
-
-  function isEmailValid(v) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  }
-
-  function updateUI() {
-    const ok = isEmailValid(email.value) && consent.checked;
-    btn.disabled = !ok;
-    btn.style.opacity = ok ? "1" : "0.4";
-    btn.style.cursor = ok ? "pointer" : "not-allowed";
-  }
-
-  email.addEventListener("input", updateUI);
-  consent.addEventListener("change", updateUI);
-
-  updateUI();
-
-  /* ---------------------------------
-     UNLOCK AFTER SUBMIT (CARRD SAFE)
-  --------------------------------- */
 
   function tryUnlock() {
     if (!form || typeof window.unlockVideo !== "function") {
@@ -70,8 +32,103 @@ export function initVideoGate() {
     }
   }
 
-  // Observa el submit real de Carrd (sin tocarlo)
-  form.addEventListener("submit", () => {
-    setTimeout(tryUnlock, 500);
+  if (shouldUnlock) {
+    tryUnlock();
+    return;
+  }
+
+  /* ---------------------------------
+     FORM VALIDATION (NO submit hook)
+  --------------------------------- */
+  if (!form) return;
+
+  const email = document.getElementById("main-form-email-input");
+  const consent = document.getElementById("main-form-consent-check");
+  const btn = form.querySelector("button[type='submit']");
+
+  if (!email || !consent || !btn) return;
+
+  // --- 1) Inject wrappers + default messages (VISIBLE BY DEFAULT) ---
+  const emailField = email.closest('.field[data-type="email"]');
+  const consentField = consent.closest('.field[data-type="checkbox"]');
+
+  function wrapField(fieldElement, errorId, errorText) {
+    if (!fieldElement) return null;
+
+    // If already wrapped (avoid duplicating on re-init)
+    if (fieldElement.querySelector(`#${errorId}`)) {
+      return fieldElement.querySelector(`#${errorId}`);
+    }
+
+    // Wrapper
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("field-inner");
+
+    while (fieldElement.firstChild) {
+      wrapper.appendChild(fieldElement.firstChild);
+    }
+    fieldElement.appendChild(wrapper);
+
+    // Error message (visible by default)
+    const errorMsg = document.createElement("div");
+    errorMsg.id = errorId;
+    errorMsg.className = "error-msg";
+    errorMsg.textContent = errorText;
+
+    // Important: default visible
+    errorMsg.style.opacity = "1";
+    errorMsg.style.display = "block";
+
+    wrapper.appendChild(errorMsg);
+    return errorMsg;
+  }
+
+  const errorEmail = wrapField(
+    emailField,
+    "error-email",
+    "introduce un email válido"
+  );
+  const errorConsent = wrapField(
+    consentField,
+    "error-consent",
+    "debes aceptar este consentimiento"
+  );
+
+  function isEmailValid(v) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  function updateUI() {
+    const emailOk = isEmailValid(email.value);
+    const consentOk = consent.checked;
+
+    // Toggle messages (hide when valid, show when invalid)
+    if (errorEmail) errorEmail.style.opacity = emailOk ? "0" : "1";
+    if (errorConsent) errorConsent.style.opacity = consentOk ? "0" : "1";
+
+    // Button gating
+    const ok = emailOk && consentOk;
+    btn.disabled = !ok;
+    btn.style.opacity = ok ? "1" : "0.4";
+    btn.style.cursor = ok ? "pointer" : "not-allowed";
+  }
+
+  email.addEventListener("input", updateUI);
+  consent.addEventListener("change", updateUI);
+
+  // Initial state: show messages by default
+  updateUI();
+
+  /* ---------------------------------
+     UNLOCK AFTER REAL SUCCESS (Carrd-safe)
+  --------------------------------- */
+  const observer = new MutationObserver(() => {
+    // Carrd usually marks the form with "success" when submission succeeds
+    if (form.classList.contains("success")) {
+      tryUnlock();
+      observer.disconnect();
+    }
   });
+
+  observer.observe(form, { attributes: true, attributeFilter: ["class"] });
 }
