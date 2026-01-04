@@ -72,7 +72,10 @@ export function initVideoGate() {
 
     // Successful submit → unlock
     localStorage.setItem("video_unlocked", "true");
-    unlockAndHide();
+    //unlockAndHide();
+    setTimeout(() => {
+      unlockAndHide();
+    }, 0);    
   });
 
   // Initial state
