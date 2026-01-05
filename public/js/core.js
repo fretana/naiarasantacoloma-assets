@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     removeOptionalText();
     initVideoGate();
     initVideoStartedTracking();
-    initFormCompletedTracking();
   }
 
   initScroll75Tracking();

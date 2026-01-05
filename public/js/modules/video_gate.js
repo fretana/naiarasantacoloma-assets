@@ -1,6 +1,5 @@
 function trackVideoUnlockedOnce(source) {
   //console.log("trackVideoUnlockedOnce called", source);
-
   if (sessionStorage.getItem("qx_video_unlocked_tracked")) return;
 
   sessionStorage.setItem("qx_video_unlocked_tracked", "true");
@@ -19,8 +18,28 @@ function trackVideoUnlockedOnce(source) {
 }
 
 
+function trackFormCompletedTracking() {
+  // Evitar duplicados por sesión
+  if (sessionStorage.getItem("qx_form_completed")) return;
+
+  sessionStorage.setItem("qx_form_completed", "true");
+
+  if (window.qxTrack && window.dataLayer) {
+    qxTrack("form_completed", {page: window.location.pathname,});
+  } else {
+    // Retry cuando GTM esté listo
+    const interval = setInterval(() => {
+      if (window.qxTrack && window.dataLayer) {
+        qxTrack("form_completed", {page: window.location.pathname,});
+        clearInterval(interval);
+      }
+    }, 300);
+  }
+}
+  
 
 export function initVideoGate() {
+
   const form = document.getElementById("main-form");
   const consentText = document.getElementById("text_consent");
   const afterMsg = document.getElementById("after-form-message");
@@ -46,6 +65,7 @@ export function initVideoGate() {
 
     window.unlockVideo();
 
+    trackFormCompletedTracking();
     trackVideoUnlockedOnce(source);
 
     if (form) form.style.display = "none";
@@ -63,24 +83,6 @@ export function initVideoGate() {
   window.addEventListener("qx:form_success", () => {
     tryUnlock("form");
   });
-
-  function initFormCompletedTracking() {
-    // Evitar duplicados por sesión
-    if (sessionStorage.getItem("qx_form_completed")) return;
-
-    window.addEventListener("qx:form_success", () => {
-      if (sessionStorage.getItem("qx_form_completed")) return;
-      sessionStorage.setItem("qx_form_completed", "true");
-
-      if (window.qxTrack && window.dataLayer) {
-        qxTrack("form_completed", {
-          page: window.location.pathname,
-        });
-      }
-    });
-  }
-  
-
 
   if (shouldUnlock) {
     tryUnlock(params.get("from") === "email" ? "email" : "storage");
