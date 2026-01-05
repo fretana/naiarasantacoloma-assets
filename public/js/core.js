@@ -12,12 +12,17 @@ function trackCheckoutOpened() {
 
   sessionStorage.setItem("qx_checkout_opened", "true");
 
+  // Si GTM ya existe, envía ahora
   if (window.qxTrack && window.dataLayer) {
     qxTrack("checkout_opened", {
       page: window.location.pathname,
     });
+  } else {
+    // Si no, marca pendiente
+    sessionStorage.setItem("qx_checkout_opened_pending", "true");
   }
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,5 +39,5 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname === "/pago") {
     trackCheckoutOpened();
   }
-    
+
 });
