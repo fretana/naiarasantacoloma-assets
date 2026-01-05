@@ -1,5 +1,5 @@
 function trackVideoUnlockedOnce(source) {
-  console.log("trackVideoUnlockedOnce called", source);
+  //console.log("trackVideoUnlockedOnce called", source);
 
   if (sessionStorage.getItem("qx_video_unlocked_tracked")) return;
 
@@ -41,7 +41,7 @@ export function initVideoGate() {
       return;
     }
 
-    console.log("tryUnlock called", source);
+    //console.log("tryUnlock called", source);
 
 
     window.unlockVideo();
