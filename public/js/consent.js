@@ -26,6 +26,9 @@
   // Aceptar
   document.getElementById("qx_accept").onclick = function () {
     localStorage.setItem("qx_cookie_consent", "accepted");
+    if (window.qxTrack) {
+      qxTrack("cookies_accepted");
+    }
     bar.style.display = "none";
 
     // Evento aceptado
@@ -38,6 +41,9 @@
   // Rechazar
   document.getElementById("qx_reject").onclick = function () {
     localStorage.setItem("qx_cookie_consent", "rejected");
+    if (window.qxTrack) {
+      qxTrack("cookies_rejected");
+    }
     bar.style.display = "none";
   };
 

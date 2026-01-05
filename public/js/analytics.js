@@ -1,8 +1,9 @@
-window.qxTrack = function (event, data = {}) {
+// analytics.js
+window.qxTrack = function (event, params = {}) {
   if (!window.dataLayer) return;
 
   window.dataLayer.push({
     event,
-    ...data,
+    ...params,
   });
 };
