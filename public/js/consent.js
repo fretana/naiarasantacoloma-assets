@@ -59,8 +59,10 @@
         window.dataLayer.push({ event: "cookies_accepted" });
       }
 
-      flushDeferredEvents();
-
+      if (window.qxFlushDeferredEvents) {
+        window.qxFlushDeferredEvents();
+      }
+      
       if (sessionStorage.getItem("qx_cookies_rejected")) {
         window.dataLayer.push({ event: "cookies_rejected" });
         sessionStorage.removeItem("qx_cookies_rejected");

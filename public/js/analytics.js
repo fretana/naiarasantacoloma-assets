@@ -9,18 +9,6 @@ window.qxTrack = function (event, params = {}) {
 };
 
 
-function flushDeferredEvents() {
-  if (!window.qxTrack || !window.dataLayer) return;
-
-  if (sessionStorage.getItem("qx_checkout_opened_pending")) {
-    qxTrack("checkout_opened", {
-      page: window.location.pathname,
-    });
-    sessionStorage.removeItem("qx_checkout_opened_pending");
-  }
-}
-
-
 export function initScroll75Tracking() {
   // Evitar duplicados por sesión
   if (sessionStorage.getItem("qx_scroll_75")) return;

@@ -1,4 +1,18 @@
 
+window.qxFlushDeferredEvents = function () {
+  if (!window.qxTrack || !window.dataLayer) return;
+
+  // checkout_opened
+  if (sessionStorage.getItem("qx_checkout_opened_pending")) {
+    qxTrack("checkout_opened", {
+      page: window.location.pathname,
+    });
+    sessionStorage.removeItem("qx_checkout_opened_pending");
+  }
+};
+
+
+
 import { removeOptionalText } from "./modules/remove_optional.js";
 import { initVideoGate, initVideoStartedTracking } from "./modules/video_gate.js";
 import { initScroll75Tracking } from "./analytics.js";
@@ -12,13 +26,11 @@ function trackCheckoutOpened() {
 
   sessionStorage.setItem("qx_checkout_opened", "true");
 
-  // Si GTM ya existe, envía ahora
   if (window.qxTrack && window.dataLayer) {
     qxTrack("checkout_opened", {
       page: window.location.pathname,
     });
   } else {
-    // Si no, marca pendiente
     sessionStorage.setItem("qx_checkout_opened_pending", "true");
   }
 }
