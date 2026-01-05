@@ -1,6 +1,6 @@
 (async function () {
 
-  // 1. Cargar HTML del banner si no existe
+  // 1. Load cookie banner HTML
   if (!document.getElementById("qx_cookie_bar")) {
     try {
       const res = await fetch(
@@ -14,7 +14,6 @@
     }
   }
 
-  // 2. Ahora el resto de la lógica, tal cual
   const bar = document.getElementById("qx_cookie_bar");
   if (!bar) return;
 
@@ -23,46 +22,48 @@
   if (!consent) bar.style.display = "block";
   if (consent === "accepted") loadGTM();
 
-  // Aceptar
+  // ACCEPT
   document.getElementById("qx_accept").onclick = function () {
     localStorage.setItem("qx_cookie_consent", "accepted");
-    if (window.qxTrack) {
-      qxTrack("cookies_accepted");
-    }
     bar.style.display = "none";
-
-    // Evento aceptado
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: "cookie_accept" });
-
-    loadGTM();
+    loadGTM(true);
   };
 
-  // Rechazar
+  // REJECT
   document.getElementById("qx_reject").onclick = function () {
     localStorage.setItem("qx_cookie_consent", "rejected");
-    if (window.qxTrack) {
-      qxTrack("cookies_rejected");
-    }
+
+    // Guardamos rechazo local (no GA)
+    sessionStorage.setItem("qx_cookies_rejected", "true");
+
     bar.style.display = "none";
   };
 
-  // Cargar GTM
-  function loadGTM() {
+  function loadGTM(trackAccept = false) {
     if (window.gtmLoaded) return;
     window.gtmLoaded = true;
 
-    const gtmId = "GTM-MF59774F"; // ← TU ID
+    window.dataLayer = window.dataLayer || [];
+
+    const gtmId = "GTM-MF59774F"; // TU ID
     const script = document.createElement("script");
 
-    script.innerHTML = `
-(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${gtmId}');
-    `;
+    script.src = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
+    script.async = true;
 
     document.head.appendChild(script);
+
+    // Emit events ONLY after GTM exists
+    script.onload = () => {
+      if (trackAccept) {
+        window.dataLayer.push({ event: "cookies_accepted" });
+      }
+
+      if (sessionStorage.getItem("qx_cookies_rejected")) {
+        window.dataLayer.push({ event: "cookies_rejected" });
+        sessionStorage.removeItem("qx_cookies_rejected");
+      }
+    };
   }
+
 })();
