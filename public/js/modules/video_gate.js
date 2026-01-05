@@ -34,14 +34,15 @@ export function initVideoGate() {
     params.get("from") === "email" ||
     localStorage.getItem("video_unlocked") === "true";
 
-  function tryUnlock() {
+  function tryUnlock(source = "form") {
     if (!form || typeof window.unlockVideo !== "function") {
-      setTimeout(tryUnlock, 100);
+      setTimeout(tryUnlock(source), 100);
       return;
     }
 
     window.unlockVideo();
-    console.log("UNLOCK VIDEO REAL");    
+
+    trackVideoUnlockedOnce(source);
 
     if (form) form.style.display = "none";
     if (consentText) consentText.style.display = "none";
@@ -55,8 +56,7 @@ export function initVideoGate() {
   }
 
   if (shouldUnlock) {
-    trackVideoUnlockedOnce("email");    
-    tryUnlock();
+    tryUnlock(params.get("from") === "email" ? "email" : "storage");
     return;
   }
 
@@ -148,8 +148,7 @@ export function initVideoGate() {
   const observer = new MutationObserver(() => {
     // Carrd usually marks the form with "success" when submission succeeds
     if (form.classList.contains("success")) {
-      trackVideoUnlockedOnce("form");
-      tryUnlock();
+      tryUnlock("form");
       observer.disconnect();
     }
   });
