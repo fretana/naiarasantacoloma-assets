@@ -60,6 +60,11 @@ export function initVideoGate() {
     }
   }
 
+  window.addEventListener("qx:form_success", () => {
+    tryUnlock("form");
+  });
+
+
   if (shouldUnlock) {
     tryUnlock(params.get("from") === "email" ? "email" : "storage");
     return;
@@ -150,7 +155,7 @@ export function initVideoGate() {
   /* ---------------------------------
      UNLOCK AFTER REAL SUCCESS (Carrd-safe)
   --------------------------------- */
-  const observer = new MutationObserver(() => {
+  /*const observer = new MutationObserver(() => {
     // Carrd usually marks the form with "success" when submission succeeds
     if (form.classList.contains("success")) {
       tryUnlock("form");
@@ -158,5 +163,6 @@ export function initVideoGate() {
     }
   });
 
-  observer.observe(form, { attributes: true, attributeFilter: ["class"] });
+  observer.observe(form, { attributes: true, attributeFilter: ["class"] });*/
+  
 }
