@@ -164,5 +164,32 @@ export function initVideoGate() {
   });
 
   observer.observe(form, { attributes: true, attributeFilter: ["class"] });*/
-  
+
 }
+
+
+export function initVideoStartedTracking() {
+  const video = document.getElementById("video");
+  if (!video) return;
+
+  // Evitar duplicados por sesión
+  if (sessionStorage.getItem("qx_video_started")) return;
+
+  const onFirstPlay = () => {
+    // Marca una sola vez
+    sessionStorage.setItem("qx_video_started", "true");
+
+    if (window.qxTrack && window.dataLayer) {
+      qxTrack("video_started", {
+        source: "lead_video",
+      });
+    }
+
+    // Limpieza: ya no necesitamos escuchar más
+    video.removeEventListener("play", onFirstPlay);
+  };
+
+  // `play` es el momento correcto (acción del usuario)
+  video.addEventListener("play", onFirstPlay, { once: true });
+}
+
