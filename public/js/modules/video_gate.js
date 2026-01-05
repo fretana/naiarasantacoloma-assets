@@ -41,6 +41,7 @@ export function initVideoGate() {
     }
 
     window.unlockVideo();
+    console.log("UNLOCK VIDEO REAL");    
 
     if (form) form.style.display = "none";
     if (consentText) consentText.style.display = "none";
