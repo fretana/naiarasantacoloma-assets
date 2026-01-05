@@ -50,6 +50,7 @@ export function initVideoGate() {
 
     if (form) form.style.display = "none";
     if (consentText) consentText.style.display = "none";
+    if (afterMsg) afterMsg.style.display = "block";
 
     localStorage.setItem("video_unlocked", "true");
 
