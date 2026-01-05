@@ -1,5 +1,4 @@
 function trackVideoUnlockedOnce(source) {
-  console.log("trackVideoUnlockedOnce called", source);
   if (sessionStorage.getItem("qx_video_unlocked_tracked")) return;
 
   sessionStorage.setItem("qx_video_unlocked_tracked", "true");
