@@ -1,3 +1,14 @@
+function trackVideoUnlockedOnce(source) {
+  if (sessionStorage.getItem("qx_video_unlocked_tracked")) return;
+
+  sessionStorage.setItem("qx_video_unlocked_tracked", "true");
+
+  if (window.qxTrack) {
+    qxTrack("video_unlocked", { source });
+  }
+}
+
+
 export function initVideoGate() {
   const form = document.getElementById("main-form");
   const consentText = document.getElementById("text_consent");
@@ -33,6 +44,7 @@ export function initVideoGate() {
   }
 
   if (shouldUnlock) {
+    trackVideoUnlockedOnce("email");    
     tryUnlock();
     return;
   }
@@ -125,6 +137,7 @@ export function initVideoGate() {
   const observer = new MutationObserver(() => {
     // Carrd usually marks the form with "success" when submission succeeds
     if (form.classList.contains("success")) {
+      trackVideoUnlockedOnce("form");
       tryUnlock();
       observer.disconnect();
     }
