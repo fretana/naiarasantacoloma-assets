@@ -64,6 +64,23 @@ export function initVideoGate() {
     tryUnlock("form");
   });
 
+  function initFormCompletedTracking() {
+    // Evitar duplicados por sesión
+    if (sessionStorage.getItem("qx_form_completed")) return;
+
+    window.addEventListener("qx:form_success", () => {
+      if (sessionStorage.getItem("qx_form_completed")) return;
+      sessionStorage.setItem("qx_form_completed", "true");
+
+      if (window.qxTrack && window.dataLayer) {
+        qxTrack("form_completed", {
+          page: window.location.pathname,
+        });
+      }
+    });
+  }
+  
+
 
   if (shouldUnlock) {
     tryUnlock(params.get("from") === "email" ? "email" : "storage");
