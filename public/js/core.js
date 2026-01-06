@@ -12,8 +12,10 @@
   }
 
   const key = `qx_payment_success_${sessionId}`;
-  if (sessionStorage.getItem(key)) {
+  //if (sessionStorage.getItem(key)) {
+  if (sessionStorage.getItem(key) === "sent") {
     console.log("Payment already tracked");
+
   } else {
     sessionStorage.setItem(key, "true");
 
@@ -23,9 +25,11 @@
         page: "/gracias",
       });
       console.log("payment_success sent", sessionId);
+      sessionStorage.setItem(key, "sent");
     } else {
       console.warn("GTM not ready, deferring");
-      sessionStorage.setItem(`${key}_pending`, "true");
+      //sessionStorage.setItem(`${key}_pending`, "true");
+      sessionStorage.setItem(key, "pending");
     }
   }
 
@@ -46,6 +50,21 @@ window.qxFlushDeferredEvents = function () {
     sessionStorage.removeItem("qx_checkout_opened_pending");
   }
 
+  Object.keys(sessionStorage).forEach((key) => {
+    if (!key.startsWith("qx_payment_success_")) return;
+
+    if (sessionStorage.getItem(key) !== "pending") return;
+
+    const txId = key.replace("qx_payment_success_", "");
+
+    qxTrack("payment_success", {
+      transaction_id: txId,
+      page: "/gracias",
+    });
+
+    sessionStorage.setItem(key, "sent");
+  });
+  
 };
 
 
