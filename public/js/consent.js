@@ -39,7 +39,51 @@
     bar.style.display = "none";
   };
 
+
   function loadGTM(trackAccept = false) {
+    if (window.gtmLoaded) return;
+    window.gtmLoaded = true;
+
+    // Asegurar dataLayer
+    window.dataLayer = window.dataLayer || [];
+
+    const gtmId = "GTM-MF59774F"; // TU ID REAL
+    const script = document.createElement("script");
+
+    script.src = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
+    script.async = true;
+
+    script.onload = () => {
+      console.log("GTM loaded");
+
+      // Evento cookies accepted (si aplica)
+      if (trackAccept) {
+        window.dataLayer.push({ event: "cookies_accepted" });
+      }
+
+      // Evento cookies rejected diferido
+      if (sessionStorage.getItem("qx_cookies_rejected")) {
+        window.dataLayer.push({ event: "cookies_rejected" });
+        sessionStorage.removeItem("qx_cookies_rejected");
+      }
+
+      // 🔑 FLUSH GLOBAL DE EVENTOS DIFERIDOS
+      if (typeof window.qxFlushDeferredEvents === "function") {
+        window.qxFlushDeferredEvents();
+      }
+    };
+
+    document.head.appendChild(script);
+
+    // Inicialización estándar GTM (antes de que cargue)
+    window.dataLayer.push({
+      "gtm.start": new Date().getTime(),
+      event: "gtm.js",
+    });
+  }
+  
+
+  /*function loadGTM(trackAccept = false) {
     if (window.gtmLoaded) return;
     window.gtmLoaded = true;
 
@@ -68,6 +112,6 @@
         sessionStorage.removeItem("qx_cookies_rejected");
       }
     };
-  }
+  }*/
 
 })();
