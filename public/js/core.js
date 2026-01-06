@@ -1,3 +1,39 @@
+(function initThanksPageTracking() {
+  if (window.location.pathname !== "/gracias") return;
+
+  console.log("Gracias page detected");
+
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get("session_id");
+
+  if (!sessionId) {
+    console.warn("No session_id in URL");
+    return;
+  }
+
+  const key = `qx_payment_success_${sessionId}`;
+  if (sessionStorage.getItem(key)) {
+    console.log("Payment already tracked");
+  } else {
+    sessionStorage.setItem(key, "true");
+
+    if (window.qxTrack && window.dataLayer) {
+      qxTrack("payment_success", {
+        transaction_id: sessionId,
+        page: "/gracias",
+      });
+      console.log("payment_success sent", sessionId);
+    } else {
+      console.warn("GTM not ready, deferring");
+      sessionStorage.setItem(`${key}_pending`, "true");
+    }
+  }
+
+  // Limpieza de URL (SIEMPRE)
+  params.delete("session_id");
+  window.history.replaceState({}, document.title, "/gracias");
+})();
+
 
 window.qxFlushDeferredEvents = function () {
   if (!window.qxTrack || !window.dataLayer) return;
@@ -9,20 +45,6 @@ window.qxFlushDeferredEvents = function () {
     });
     sessionStorage.removeItem("qx_checkout_opened_pending");
   }
-
-
-  Object.keys(sessionStorage).forEach((k) => {
-    if (k.startsWith("qx_payment_success_") && k.endsWith("_pending")) {
-      const txId = k.replace("qx_payment_success_", "").replace("_pending", "");
-
-      qxTrack("payment_success", {
-        transaction_id: txId,
-        page: window.location.pathname,
-      });
-
-      sessionStorage.removeItem(k);
-    }
-  });
 
 };
 
@@ -50,50 +72,6 @@ function trackCheckoutOpened() {
   }
 }
 
-/* -------------------------------
-   CHECKOUT OPENED
--------------------------------- */
-function getTransactionId() {
-  const params = new URLSearchParams(window.location.search);
-  /*return (
-    params.get("session_id") ||
-    params.get("payment_intent") ||
-    params.get("tx") ||
-    "unknown"
-  );*/
-  return params.get("session_id");
-}
-
-function trackPaymentSuccess() {
-  const txId = getTransactionId();
-  if (!txId) return;
-
-  const key = `qx_payment_success_${txId}`;
-  if (sessionStorage.getItem(key)) return;
-
-  sessionStorage.setItem(key, "true");
-
-  if (window.qxTrack && window.dataLayer) {
-    qxTrack("payment_success", {
-      transaction_id: txId,
-      page: window.location.pathname,
-    });
-  } else {
-    sessionStorage.setItem(`${key}_pending`, "true");
-  }
-}
-
-function cleanThanksUrl() {
-  const url = new URL(window.location.href);
-
-  if (url.searchParams.has("session_id")) {
-    url.searchParams.delete("session_id");
-    window.history.replaceState({}, document.title, url.pathname);
-  }
-}
-
-
-
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -111,9 +89,5 @@ document.addEventListener("DOMContentLoaded", () => {
     trackCheckoutOpened();
   }
 
-  if (window.location.pathname === "/gracias") {
-    trackPaymentSuccess();
-    cleanThanksUrl();
-  }
 
 });
