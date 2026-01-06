@@ -1,9 +1,10 @@
 function trackVideoUnlockedOnce(source) {
   //console.log("trackVideoUnlockedOnce called", source);
-  if (sessionStorage.getItem("qx_video_unlocked_tracked")) return;
 
-  sessionStorage.setItem("qx_video_unlocked_tracked", "true");
-
+  //if (sessionStorage.getItem("qx_video_unlocked_tracked")) return;
+  //sessionStorage.setItem("qx_video_unlocked_tracked", "true");
+  if (localStorage.getItem("qx_video_unlocked_tracked")) return;
+  localStorage.setItem("qx_video_unlocked_tracked", "true");
   if (window.qxTrack && window.dataLayer) {
     qxTrack("video_unlocked", { source });
   } else {
@@ -20,10 +21,10 @@ function trackVideoUnlockedOnce(source) {
 
 function trackFormCompletedTracking() {
   // Evitar duplicados por sesión
-  if (sessionStorage.getItem("qx_form_completed")) return;
-
-  sessionStorage.setItem("qx_form_completed", "true");
-
+  //if (sessionStorage.getItem("qx_form_completed")) return;
+  //sessionStorage.setItem("qx_form_completed", "true");
+  if (localStorage.getItem("qx_form_completed")) return;
+  localStorage.setItem("qx_form_completed", "true");
   if (window.qxTrack && window.dataLayer) {
     qxTrack("form_completed", {page: window.location.pathname,});
   } else {
