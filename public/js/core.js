@@ -17,7 +17,7 @@
     console.log("Payment already tracked");
 
   } else {
-    sessionStorage.setItem(key, "true");
+    //sessionStorage.setItem(key, "true");
 
     if (window.qxTrack && window.dataLayer) {
       qxTrack("payment_success", {
@@ -64,7 +64,7 @@ window.qxFlushDeferredEvents = function () {
 
     sessionStorage.setItem(key, "sent");
   });
-  
+
 };
 
 
