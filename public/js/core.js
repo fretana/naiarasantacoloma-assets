@@ -32,6 +32,7 @@
       sessionStorage.setItem(key, "pending");
     }
   }
+  
 
   // Limpieza de URL (SIEMPRE)
   params.delete("session_id");
