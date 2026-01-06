@@ -9,7 +9,23 @@ window.qxTrack = function (event, params = {}) {
 };
 
 
+const SCROLL_75_EXCLUDED_PATHS = [
+  "/pago",
+  "/gracias",
+  "/politica-de-privacidad",
+  "/aviso-legal",
+  "/politica-de-cookies",
+];
+
 export function initScroll75Tracking() {
+
+  const path = window.location.pathname;
+
+  // excluir páginas no deseadas
+  if (SCROLL_75_EXCLUDED_PATHS.includes(path)) {
+    return;
+  }
+
   // Evitar duplicados por sesión
   if (sessionStorage.getItem("qx_scroll_75")) return;
 
