@@ -209,6 +209,6 @@ body {
 }
 
 /* Footer inyectado */
-#qx-footer {
+#qx_footer {
   flex-shrink: 0;
 }
