@@ -16,15 +16,15 @@
     const html = await res.text();
 
     // Insertar al final del body
-    //document.body.insertAdjacentHTML("beforeend", html);
-    document.body.appendChild(
+    document.body.insertAdjacentHTML("beforeend", html);
+    /*document.body.appendChild(
       document.createRange().createContextualFragment(html)
     );
 
     const footer = document.getElementById("qx_footer");
     if (footer && footer.parentElement !== document.body) {
       document.body.appendChild(footer);
-    }    
+    }    */
 
     // Año automático (por si lo quieres dinámico más adelante)
     const yearNode = document.querySelector("#qx_footer .qx_footer_copy");
