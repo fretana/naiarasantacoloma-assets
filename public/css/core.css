@@ -223,7 +223,7 @@ body:has(#qx_footer) .site-wrapper {
 }
 
 #qx_footer {
-  height: var(--qx-footer-height);
+  min-height: var(--qx-footer-height);
   background: #D4B72A;
   padding: 0.75rem 1.875rem;
   font-family: 'Libre Franklin', sans-serif;
