@@ -214,7 +214,7 @@ body {
 }
 
 :root {
-  --qx-footer-height: 50px; /* ajusta si cambia */
+  --qx-footer-height: 80px; /* ajusta si cambia */
 }
 
 /* Cuando existe el footer, Carrd no debe ocupar todo el viewport */
