@@ -2,7 +2,7 @@
    LEGAL FOOTER — FINAL SPEC
 ============================ */
 
-#qx_legal_footer {
+#qx_footer {
   background: #D4B72A;
   padding: 0.75rem 1.875rem;
   font-family: 'Libre Franklin', sans-serif;
@@ -63,7 +63,7 @@
 ============================ */
 
 @media (max-width: 600px) {
-  #qx_legal_footer {
+  #qx_footer {
     padding: 0.75rem 1.25rem;
   }
 
