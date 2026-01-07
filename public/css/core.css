@@ -196,34 +196,31 @@
    Carrd sticky footer fix
 ========================= */
 
-body {
+/*body {
   display: flex;
   flex-direction: column;
 }
 
-/* Contenido principal Carrd */
 .site-wrapper {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
 }
 
-/* Footer inyectado */
 #qx_footer {
   flex-shrink: 0;
 }
 
 :root {
-  --qx-footer-height: 64px; /* ajusta si cambia */
+  --qx-footer-height: 64px;
 }
 
-/* Cuando existe el footer, Carrd no debe ocupar todo el viewport */
 body:has(#qx_footer) .site-wrapper {
   min-height: calc(var(--viewport-height) - var(--qx-footer-height));
-}
+}*/
 
 #qx_footer {
-  height: var(--qx-footer-height);
+  /*height: var(--qx-footer-height);*/
   background: #D4B72A;
   padding: 0.75rem 1.875rem;
   font-family: 'Libre Franklin', sans-serif;
