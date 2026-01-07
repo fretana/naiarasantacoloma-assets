@@ -1,6 +1,6 @@
 (async function () {
   // Evitar duplicados
-  if (document.getElementById("qx-footer")) return;
+  if (document.getElementById("qx_footer")) return;
 
   try {
     const res = await fetch(
@@ -21,13 +21,13 @@
       document.createRange().createContextualFragment(html)
     );
 
-    const footer = document.getElementById("qx-footer");
+    const footer = document.getElementById("qx_footer");
     if (footer && footer.parentElement !== document.body) {
       document.body.appendChild(footer);
     }    
 
     // Año automático (por si lo quieres dinámico más adelante)
-    const yearNode = document.querySelector("#qx-footer .qx_footer_copy");
+    const yearNode = document.querySelector("#qx_footer .qx_footer_copy");
     if (yearNode) {
       const year = new Date().getFullYear();
       yearNode.innerHTML = yearNode.innerHTML.replace(
