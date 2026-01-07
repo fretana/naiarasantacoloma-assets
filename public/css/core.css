@@ -212,3 +212,16 @@ body {
 #qx_footer {
   flex-shrink: 0;
 }
+
+:root {
+  --qx-footer-height: 64px; /* ajusta si cambia */
+}
+
+/* Cuando existe el footer, Carrd no debe ocupar todo el viewport */
+body:has(#qx-footer) .site-wrapper {
+  min-height: calc(var(--viewport-height) - var(--qx-footer-height));
+}
+
+#qx-footer {
+  height: var(--qx-footer-height);
+}
