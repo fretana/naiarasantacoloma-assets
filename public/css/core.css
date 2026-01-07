@@ -201,6 +201,17 @@ body {
   flex-direction: column;
 }
 
+/* Contenido principal Carrd */
+.site-wrapper {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Footer inyectado */
+#qx_footer {
+  flex-shrink: 0;
+}
 
 :root {
   --qx-footer-height: 10px; /* ajusta si cambia */
