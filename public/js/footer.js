@@ -16,12 +16,12 @@
     const html = await res.text();
 
     // Insertar al final del body
-    document.body.insertAdjacentHTML("beforeend", html);
-    /*document.body.appendChild(
+    //document.body.insertAdjacentHTML("beforeend", html);
+    document.body.appendChild(
       document.createRange().createContextualFragment(html)
     );
 
-    const footer = document.getElementById("qx_footer");
+    /*const footer = document.getElementById("qx_footer");
     if (footer && footer.parentElement !== document.body) {
       document.body.appendChild(footer);
     }    */
