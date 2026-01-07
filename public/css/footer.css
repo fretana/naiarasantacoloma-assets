@@ -66,12 +66,11 @@
 
 @media (max-width: 600px) {
   #qx_footer {
-    /*padding: 0.75rem 1.25rem;*/
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1.25rem;
   }
 
-  /*.qx_footer_links {
+  .qx_footer_links {
     flex-wrap: wrap;
     gap: 0.4rem;
-  }*/
+  }
 }
