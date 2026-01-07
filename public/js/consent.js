@@ -54,7 +54,7 @@
     script.async = true;
 
     script.onload = () => {
-      console.log("GTM loaded");
+      //console.log("GTM loaded");
 
       // Evento cookies accepted (si aplica)
       if (trackAccept) {
@@ -82,6 +82,8 @@
     });
   }
   
+
+
 
   /*function loadGTM(trackAccept = false) {
     if (window.gtmLoaded) return;

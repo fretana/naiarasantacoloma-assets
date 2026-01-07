@@ -1,7 +1,7 @@
 (function initThanksPageTracking() {
   if (window.location.pathname !== "/gracias") return;
 
-  console.log("Gracias page detected");
+  //console.log("Gracias page detected");
 
   const params = new URLSearchParams(window.location.search);
   const sessionId = params.get("session_id");
@@ -14,7 +14,7 @@
   const key = `qx_payment_success_${sessionId}`;
   //if (sessionStorage.getItem(key)) {
   if (sessionStorage.getItem(key) === "sent") {
-    console.log("Payment already tracked");
+    //console.log("Payment already tracked");
 
   } else {
     //sessionStorage.setItem(key, "true");
@@ -24,10 +24,10 @@
         transaction_id: sessionId,
         page: "/gracias",
       });
-      console.log("payment_success sent", sessionId);
+      //console.log("payment_success sent", sessionId);
       sessionStorage.setItem(key, "sent");
     } else {
-      console.warn("GTM not ready, deferring");
+      //console.warn("GTM not ready, deferring");
       //sessionStorage.setItem(`${key}_pending`, "true");
       sessionStorage.setItem(key, "pending");
     }

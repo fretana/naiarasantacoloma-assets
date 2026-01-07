@@ -1,9 +1,39 @@
 // analytics.js
-window.qxTrack = function (event, params = {}) {
+/*window.qxTrack = function (event, params = {}) {
   if (!window.dataLayer) return;
 
   window.dataLayer.push({
     event,
+    ...params,
+  });
+};
+*/
+
+// analytics.js
+window.qxTrack = function (event, params = {}) {
+  if (!window.dataLayer) return;
+
+  const search = new URLSearchParams(window.location.search);
+
+  const utmPayload = {
+    utm_source: search.get("utm_source"),
+    utm_medium: search.get("utm_medium"),
+    utm_campaign: search.get("utm_campaign"),
+    utm_content: search.get("utm_content"),
+    utm_term: search.get("utm_term"),
+    variant: search.get("variant"),
+    hero: search.get("hero"),
+  };
+
+  // Limpia nulls
+  Object.keys(utmPayload).forEach(
+    k => utmPayload[k] == null && delete utmPayload[k]
+  );
+
+  window.dataLayer.push({
+    event,
+    page: window.location.pathname,
+    ...utmPayload,
     ...params,
   });
 };
