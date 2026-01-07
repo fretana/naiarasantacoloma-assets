@@ -218,10 +218,10 @@ body {
 }
 
 /* Cuando existe el footer, Carrd no debe ocupar todo el viewport */
-body:has(#qx-footer) .site-wrapper {
+body:has(#qx_footer) .site-wrapper {
   min-height: calc(var(--viewport-height) - var(--qx-footer-height));
 }
 
-#qx-footer {
+#qx_footer {
   height: var(--qx-footer-height);
 }
