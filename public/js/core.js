@@ -143,29 +143,60 @@ document.addEventListener("DOMContentLoaded", () => {
     return target.toString();
   }
 
+
 (function () {
-  function applyLink() {
-    const btn = document.getElementById("cta-retreat");
-    if (!btn) return;
+  function buildFinalUrl(baseUrl, extraParams) {
+    const current = new URL(window.location.href);
+    const target = new URL(baseUrl, current.origin);
 
-    const params = window.location.search || "";
-    let url = "https://naiarasantacoloma.com/retiro-girona";
+    // Copiar TODOS los params actuales (utm, variant, hero, etc.)
+    current.searchParams.forEach((value, key) => {
+      target.searchParams.set(key, value);
+    });
 
-    if (params) {
-      url += params + "&internal_offer=volver-al-cuerpo";
-    } else {
-      url += "?internal_offer=volver-al-cuerpo";
-    }
+    // Añadir params internos
+    Object.entries(extraParams || {}).forEach(([k, v]) => {
+      if (v) target.searchParams.set(k, v);
+    });
 
-    btn.href = url;
+    return target.toString();
   }
 
-  // Carrd fix: ejecutar varias veces
-  document.addEventListener("DOMContentLoaded", function () {
-    applyLink();
-    setTimeout(applyLink, 300);
-    setTimeout(applyLink, 800);
-    setTimeout(applyLink, 1500);
+  function wireCarrdButton(containerId, baseUrl, extraParams) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const anchor = container.querySelector("a[href]");
+    if (!anchor) return;
+
+    const handler = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation?.();
+
+      const finalUrl = buildFinalUrl(baseUrl, extraParams);
+      window.location.assign(finalUrl);
+    };
+
+    // Captura para ganarle a Carrd
+    anchor.addEventListener("click", handler, true);
+    anchor.addEventListener("pointerup", handler, true);
+    anchor.addEventListener("touchend", handler, true);
+  }
+
+  function init() {
+    wireCarrdButton(
+      "cta-retreat",
+      "https://naiarasantacoloma.com/retiro-girona",
+      { internal_offer: "volver-al-cuerpo" }
+    );
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    init();
+    setTimeout(init, 300);
+    setTimeout(init, 800);
+    setTimeout(init, 1500);
   });
 })();
 
