@@ -107,7 +107,7 @@ window.qxTrack = function (event, params = {}) {
 
 
 
-/*(function () {
+(function () {
   const CLEAN_PARAMS = [
     "utm_source",
     "utm_medium",
@@ -151,7 +151,7 @@ window.qxTrack = function (event, params = {}) {
     cleanUrlParams();
   }
 })();
-*/
+
 
 
 
