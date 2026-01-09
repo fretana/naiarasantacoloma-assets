@@ -70,14 +70,29 @@ window.qxTrack = function (event, params = {}) {
     resolvedOffer = offerFromSession;
   }
 
-  const utmPayload = {
+  // --- INTERNAL_OFFER ---
+  const offerFromUrl = search.get("internal_offer");
+  const offerFromSession = sessionStorage.getItem("internal_offer");
+
+  let resolvedOffer = null;
+  if (offerFromUrl) {
+    resolvedOffer = offerFromUrl;
+    sessionStorage.setItem("internal_offer", offerFromUrl);
+  } else if (offerFromSession) {
+    resolvedOffer = offerFromSession;
+  }
+
+  /*const utmPayload = {
     utm_source: search.get("utm_source"),
     utm_medium: search.get("utm_medium"),
     utm_campaign: search.get("utm_campaign"),
     utm_content: search.get("utm_content"),
     utm_term: search.get("utm_term"),
     hero: search.get("hero"),
-  };
+  };*/
+  const utmPayload = {
+    page: window.location.pathname,
+  };  
 
   // Añadir variant SOLO si no viene ya en params
   if (!params.variant && resolvedVariant) {
@@ -101,6 +116,54 @@ window.qxTrack = function (event, params = {}) {
     ...params,
   });
 };
+
+
+
+(function () {
+  const CLEAN_PARAMS = [
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_content",
+    "utm_term",
+    "variant",
+    "hero",
+    "internal_offer",
+  ];
+
+  function cleanUrlParams() {
+    if (!window.history || !window.history.replaceState) return;
+
+    const url = new URL(window.location.href);
+    let changed = false;
+
+    CLEAN_PARAMS.forEach((param) => {
+      if (url.searchParams.has(param)) {
+        url.searchParams.delete(param);
+        changed = true;
+      }
+    });
+
+    if (changed) {
+      const clean =
+        url.pathname +
+        (url.searchParams.toString()
+          ? "?" + url.searchParams.toString()
+          : "") +
+        url.hash;
+
+      window.history.replaceState({}, "", clean);
+    }
+  }
+
+  // Ejecutar tras primer render
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", cleanUrlParams);
+  } else {
+    cleanUrlParams();
+  }
+})();
+
 
 
 
