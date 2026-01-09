@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-
+/*
 (function () {
   function normalizeQuery(qs) {
     if (!qs) return "";
@@ -176,3 +176,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 })();
 
+*/
