@@ -82,17 +82,17 @@ window.qxTrack = function (event, params = {}) {
     resolvedOffer = offerFromSession;
   }
 
-  /*const utmPayload = {
+  const utmPayload = {
     utm_source: search.get("utm_source"),
     utm_medium: search.get("utm_medium"),
     utm_campaign: search.get("utm_campaign"),
     utm_content: search.get("utm_content"),
     utm_term: search.get("utm_term"),
     hero: search.get("hero"),
-  };*/
-  const utmPayload = {
+  };
+  /*const utmPayload = {
     page: window.location.pathname,
-  };  
+  };  */
 
   // Añadir variant SOLO si no viene ya en params
   if (!params.variant && resolvedVariant) {
