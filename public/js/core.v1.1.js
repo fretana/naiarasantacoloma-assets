@@ -143,4 +143,36 @@ document.addEventListener("DOMContentLoaded", () => {
     return target.toString();
   }
 
+  function wireParamForwarding() {
+    // Caso 1: botón con data-forward-to + data-flow-step
+    document.querySelectorAll("[data-forward-to]").forEach((el) => {
+      const to = el.getAttribute("data-forward-to");
+      const flowStep = el.getAttribute("data-flow-step") || "";
+      if (!to) return;
+
+      el.setAttribute(
+        "href",
+        buildUrlWithForwardParams(to, flowStep ? { flow_step: flowStep } : {})
+      );
+    });
+
+    // Caso 2: fallback por IDs conocidos (si no puedes usar data-attributes)
+    const ctaRetreat = document.querySelector("#cta-retreat");
+    if (ctaRetreat) {
+      ctaRetreat.setAttribute(
+        "href",
+        buildUrlWithForwardParams("https://naiarasantacoloma.com/retreat_girona", {
+          flow_step: "volver_al_cuerpo",
+        })
+      );
+    }
+  }
+
+  // Ejecutar cuando el DOM esté listo
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", wireParamForwarding);
+  } else {
+    wireParamForwarding();
+  }
+})();
 
