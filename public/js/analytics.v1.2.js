@@ -103,8 +103,12 @@ window.qxTrack = function (event, params = {}) {
     ...utmPayload,
     ...params,
   });
-};
 
+  if (typeof window.__qxCleanUrlNow === "function") {
+    window.__qxCleanUrlNow();
+  }
+  
+};
 
 
 (function () {
@@ -119,7 +123,7 @@ window.qxTrack = function (event, params = {}) {
     "internal_offer",
   ];
 
-  function cleanUrlParams() {
+  window.cleanUrlParams = function () {
     if (!window.history || !window.history.replaceState) return;
 
     const url = new URL(window.location.href);
@@ -142,15 +146,33 @@ window.qxTrack = function (event, params = {}) {
 
       window.history.replaceState({}, "", clean);
     }
+  };
+})();
+
+(function () {
+  let urlCleaned = false;
+
+  function safeClean() {
+    if (urlCleaned) return;
+    urlCleaned = true;
+
+    if (typeof window.cleanUrlParams === "function") {
+      window.cleanUrlParams();
+    }
   }
 
-  // Ejecutar tras primer render
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", cleanUrlParams);
-  } else {
-    cleanUrlParams();
-  }
+  // ⏱️ Fallback: limpia aunque no haya interacción
+  // 1500ms es suficiente para que GA4 dispare page_view
+  const CLEAN_DELAY_MS = 1500;
+  const cleanTimer = setTimeout(safeClean, CLEAN_DELAY_MS);
+
+  // 🧲 Hook para que qxTrack cancele el timer y limpie antes
+  window.__qxCleanUrlNow = function () {
+    clearTimeout(cleanTimer);
+    safeClean();
+  };
 })();
+
 
 
 
