@@ -1,0 +1,227 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;500&display=swap');
+
+
+/* =========================================================
+   ACCORDION (details / summary)
+========================================================= */
+
+.my-accordion details {
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  padding: 12px 0;
+  font-size: 1.5rem;
+}
+
+/* Remove default marker */
+.my-accordion summary {
+  list-style: none;
+  cursor: pointer;
+
+  font-size: 1.5rem;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  line-height: 1.35;
+  justify-content: space-between;
+}
+
+.my-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Custom indicator */
+.my-accordion summary::after {
+  content: "+";
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+/* Open state */
+.my-accordion details[open] summary::after {
+  content: "–";
+}
+
+/* Content panel */
+.my-accordion details > div {
+  padding: 12px 0 8px 0;
+  opacity: 0.9;
+  text-align: left !important;
+}
+
+/* Optional: smooth open feel */
+.my-accordion details > div {
+  animation: accordionFade 0.2s ease;
+}
+
+@keyframes accordionFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================================
+   ACCORDION – smooth transitions (no flicker)
+========================================================= */
+
+.my-accordion details > div {
+	transition: opacity 0.25s ease, transform 0.25s ease;
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.my-accordion details[open] > div {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+
+
+
+
+
+/* =========================================================
+   FORM — SELECT / CHECKBOX STYLING
+========================================================= */
+
+/* Scoped SELECT styling */
+#main-form select {
+  color: #FFFFFFB5 !important;
+  background-color: #36302F !important;
+}
+
+#main-form select option {
+  color: #FFFFFFB5 !important;
+  background-color: #36302F !important;
+}
+
+/* Limited browser support, but safe */
+#main-form select option:checked,
+#main-form select option:hover {
+  background-color: #1c1a14 !important;
+  color: #ffffff !important;
+}
+
+/* =========================================================
+   FORM — AUTOFILL OVERRIDE (WebKit)
+========================================================= */
+
+#main-form input:-webkit-autofill,
+#main-form input:-webkit-autofill:hover,
+#main-form input:-webkit-autofill:focus,
+#main-form textarea:-webkit-autofill,
+#main-form select:-webkit-autofill {
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+  box-shadow: 0 0 0px 1000px rgba(28, 26, 20, 0.22) inset !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* =========================================================
+   FORM — CHECKBOX
+========================================================= */
+
+#main-form .field[data-type="checkbox"] label,
+#main-form .field[data-type="checkbox"] span {
+  color: #000000 !important;
+  font-family: inherit;
+  font-weight: 500 !important;
+  letter-spacing: 0.4px !important;
+  line-height: 1 !important;
+}
+
+#main-form input[type="checkbox"] {
+  accent-color: #FFFFFF !important;
+  width: 18px;
+  height: 18px;
+}
+
+/* =========================================================
+   FORM — ERROR / HELPER TEXT
+========================================================= */
+
+.field-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.error-msg {
+  font-size: 16px;
+  color: #000000;
+  margin-top: 6px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+  .error-msg {
+    font-size: 15px;
+    margin-top: 4px;
+  }
+
+  #main-form .field[data-type="checkbox"] span {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1400px) {
+  .error-msg {
+    font-size: 17px;
+    margin-top: 4px;
+  }
+
+  #main-form .field[data-type="checkbox"] span {
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .error-msg {
+    font-size: 18px;
+    margin-top: 6px;
+  }
+
+  #main-form .field[data-type="checkbox"] span {
+    font-size: 18px;
+  }
+}
+
+
+/* =========================
+   Carrd sticky footer fix
+========================= */
+
+/*body {
+  display: flex;
+  flex-direction: column;
+}
+
+.site-wrapper {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#qx_footer {
+  flex-shrink: 0;
+}
+
+:root {
+  --qx-footer-height: 64px;
+}
+
+body:has(#qx_footer) .site-wrapper {
+  min-height: calc(var(--viewport-height) - var(--qx-footer-height));
+}*/
+
